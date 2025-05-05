@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import PasswordInput from "./PasswordInput";
 import LoadingButton from "./LoadingButton";
 import GoogleSignInButton from "./GoogleSignInButton";
+import { useRouter } from "next/navigation";
 
 interface AuthFormProps {
   isLogin: boolean;
@@ -15,12 +16,46 @@ const AuthForm: React.FC<AuthFormProps> = ({ isLogin, setIsLogin }) => {
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const router = useRouter();
+
+  const validateEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
+    setError(null);
+
+    // Basic validation
+    if (!email || !password) {
+      setError("All fields are required.");
+      return;
+    }
+
+    if (!validateEmail(email)) {
+      setError("Invalid email format.");
+      return;
+    }
+
     setLoading(true);
-    // Simulate API call
-    setTimeout(() => setLoading(false), 1000);
+
+    setTimeout(() => {
+      setLoading(false);
+
+      if (
+        email === "test@visionexdigital.com.au" &&
+        password === "password123"
+      ) {
+        // TODO: Replace with Zustand session store
+        localStorage.setItem("session", JSON.stringify({ email }));
+        router.push("/dashboard");
+      } else {
+        setError("Invalid credentials. Please try again.");
+      }
+    }, 1000);
   };
 
   return (
@@ -29,7 +64,9 @@ const AuthForm: React.FC<AuthFormProps> = ({ isLogin, setIsLogin }) => {
       onSubmit={handleSubmit}
     >
       <div className="flex flex-col gap-4">
-        <label htmlFor="email" className="text-2xl font-medium">Email address</label>
+        <label htmlFor="email" className="text-2xl font-medium">
+          Email address
+        </label>
         <input
           id="email"
           type="email"
@@ -42,12 +79,17 @@ const AuthForm: React.FC<AuthFormProps> = ({ isLogin, setIsLogin }) => {
       </div>
 
       <div className="flex flex-col gap-4">
-        <label htmlFor="password" className="text-2xl font-medium">Password</label>
-        <PasswordInput
-          value={password}
-          onChange={setPassword}
-        />
+        <label htmlFor="password" className="text-2xl font-medium">
+          Password
+        </label>
+        <PasswordInput value={password} onChange={setPassword} />
       </div>
+
+      {error && (
+        <p className="text-red-400 font-medium text-sm mt-[-10px]">
+          {error}
+        </p>
+      )}
 
       <LoadingButton
         loading={loading}
