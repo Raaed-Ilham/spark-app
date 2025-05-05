@@ -5,6 +5,7 @@ import PasswordInput from "./PasswordInput";
 import LoadingButton from "./LoadingButton";
 import GoogleSignInButton from "./GoogleSignInButton";
 import { useRouter } from "next/navigation";
+import { useSessionStore } from "../store/useSessionStore";
 
 interface AuthFormProps {
   isLogin: boolean;
@@ -19,6 +20,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ isLogin, setIsLogin }) => {
   const [error, setError] = useState<string | null>(null);
 
   const router = useRouter();
+  const login = useSessionStore((state) => state.login);
 
   const validateEmail = (email: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -42,6 +44,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ isLogin, setIsLogin }) => {
 
     setLoading(true);
 
+    // Simulated login
     setTimeout(() => {
       setLoading(false);
 
@@ -49,9 +52,8 @@ const AuthForm: React.FC<AuthFormProps> = ({ isLogin, setIsLogin }) => {
         email === "test@visionexdigital.com.au" &&
         password === "password123"
       ) {
-        // TODO: Replace with Zustand session store
-        localStorage.setItem("session", JSON.stringify({ email }));
-        router.push("/dashboard");
+        login(email); // ✅ Set session using Zustand
+        router.push("/dashboard"); // ✅ Navigate to dashboard
       } else {
         setError("Invalid credentials. Please try again.");
       }
