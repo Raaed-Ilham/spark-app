@@ -35,7 +35,7 @@ const LoginPage: React.FC = () => {
                 {/* Right section with image and testimonial */}
                 <section className="relative w-1/2 max-md:hidden">
                     <img
-                        src="Login Stock Img"
+                        src="./stock-Img.jpeg"
                         alt="Login banner"
                         className="object-cover rounded-3xl size-full"
                     />
