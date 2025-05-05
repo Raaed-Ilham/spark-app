@@ -2,14 +2,14 @@
 
 import React, { useState } from "react";
 import Logo from "./Logo";
-import AuthForm from "./AuthForm.tsx";
+import AuthForm from "./AuthForm";
 import TestimonialCard from "./TestimonialCard";
 
 const LoginPage: React.FC = () => {
     const [isLogin, setIsLogin] = useState(true);
 
     return (
-        <main className="flex w-screen h-screen text-white bg-neutral-900">
+        <main className="flex w-screen h-screen">
             <div className="flex w-full max-md:flex-col">
                 {/* Left section with form */}
                 <section className="flex flex-col p-20 w-1/2 max-md:p-6 max-md:w-full">
@@ -35,22 +35,12 @@ const LoginPage: React.FC = () => {
                 {/* Right section with image and testimonial */}
                 <section className="relative w-1/2 max-md:hidden">
                     <img
-                        src="https://placehold.co/704x976"
+                        src="Login Stock Img"
                         alt="Login banner"
                         className="object-cover rounded-3xl size-full"
                     />
                     <TestimonialCard />
                 </section>
-            </div>
-
-            {/* Font import */}
-            <div>
-                <div
-                    dangerouslySetInnerHTML={{
-                        __html:
-                            "<link href=\"https://fonts.googleapis.com/css2?family=Inter&display=swap\" rel=\"stylesheet\">",
-                    }}
-                />
             </div>
         </main>
     );
